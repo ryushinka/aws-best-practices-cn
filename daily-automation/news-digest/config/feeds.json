@@ -10,11 +10,11 @@
     {"name": "Hacker News Top", "url": "https://hnrss.org/newest?points=100", "category": "云计算/科技", "enabled": true},
     {"name": "Ars Technica", "url": "https://feeds.arstechnica.com/arstechnica/technology-lab", "category": "云计算/科技", "enabled": true},
     {"name": "WSJ Markets", "url": "https://feeds.content.dowjones.io/public/rss/mw_realtimeheadlines", "category": "金融", "enabled": true},
-    {"name": "Reuters Business", "url": "https://www.reutersagency.com/feed/?taxonomy=best-sectors&post_type=best", "category": "金融", "enabled": true},
+    {"name": "Reuters Top News", "url": "https://feeds.reuters.com/reuters/topNews", "category": "金融", "enabled": false},
     {"name": "STAT News", "url": "https://www.statnews.com/feed/", "category": "HCLS", "enabled": true},
     {"name": "FiercePharma", "url": "https://www.fiercepharma.com/rss/xml", "category": "HCLS", "enabled": true},
     {"name": "Retail Dive", "url": "https://www.retaildive.com/feeds/news/", "category": "零售", "enabled": true},
-    {"name": "CleanTechnica", "url": "https://cleantechnica.com/feed/", "category": "新能源", "enabled": true},
+    {"name": "Electrek", "url": "https://electrek.co/feed/", "category": "新能源", "enabled": true},
     {"name": "TechCrunch", "url": "https://techcrunch.com/feed/", "category": "云计算/科技", "enabled": true}
   ]
 }

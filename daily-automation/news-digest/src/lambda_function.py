@@ -10,7 +10,7 @@ RECIPIENT = "zhhliu@amazon.com"
 SENDER = "zhhliu@amazon.com"
 SES_REGION = "us-west-2"
 BEDROCK_REGION = "us-west-2"
-BEDROCK_MODEL = "us.anthropic.claude-opus-4-7"
+BEDROCK_MODEL = "us.anthropic.claude-sonnet-4-6"
 DYNAMODB_TABLE = "daily-news-stats"
 MAX_ARTICLES = 100
 
@@ -194,38 +194,52 @@ def generate_summary(articles):
     for a in articles:
         by_cat.setdefault(a["category"], []).append(a)
 
-    # Build prompt
-    article_text = ""
+    bedrock = boto3.client("bedrock-runtime", region_name=BEDROCK_REGION)
+    all_html = ""
+
+    # Process each category separately to avoid timeout
     for cat, items in by_cat.items():
-        article_text += f"\n## {cat}\n"
+        article_text = ""
+        link_map = ""
         for i, a in enumerate(items, 1):
             article_text += f"{i}. [{a['source']}] {a['title']}\n   {a['description'][:200]}\n"
+            link_map += f"{i}. {a['link']}\n"
 
-    prompt = f"""请将以下英文新闻整理成中文摘要邮件。要求：
-1. 按分类整理，保持原有分类
-2. 每条新闻翻译成中文，写 2-3 句话的摘要
-3. 标注来源名称
-4. 输出 HTML 格式，使用 <h3> 作为分类标题，<ol> 列表展示新闻
-5. 每条新闻格式：<li><b>标题中文</b><br>摘要内容 <span style="color:#888">(来源: xxx)</span></li>
-6. 分类标题前加 emoji：AWS=☁️ AI=🤖 云计算/科技=💻 金融=💰 HCLS=🏥 零售=🛒 新能源=⚡
-7. 不要输出 markdown，只输出纯 HTML
+        prompt = f"""将以下英文新闻翻译成中文摘要，输出纯 HTML（不要 markdown）。
+每条格式：<li><a href="原始URL" style="color:#0073bb;text-decoration:none;font-weight:bold">中文标题</a><br>2-3句中文摘要 <span style="color:#888">(来源: xxx)</span></li>
+用 <ol> 列表包裹。
 
-新闻列表：
+原始链接（按编号对应）：
+{link_map}
+
+新闻：
 {article_text}"""
 
-    bedrock = boto3.client("bedrock-runtime", region_name=BEDROCK_REGION)
-    response = bedrock.invoke_model(
-        modelId=BEDROCK_MODEL,
-        body=json.dumps(
-            {
-                "anthropic_version": "bedrock-2023-05-31",
-                "max_tokens": 8000,
-                "messages": [{"role": "user", "content": prompt}],
-            }
-        ),
-    )
-    result = json.loads(response["body"].read())
-    return result["content"][0]["text"]
+        try:
+            response = bedrock.invoke_model(
+                modelId=BEDROCK_MODEL,
+                body=json.dumps(
+                    {
+                        "anthropic_version": "bedrock-2023-05-31",
+                        "max_tokens": 4000,
+                        "messages": [{"role": "user", "content": prompt}],
+                    }
+                ),
+            )
+            result = json.loads(response["body"].read())
+            cat_html = result["content"][0]["text"]
+        except Exception as e:
+            print(f"Bedrock error for {cat}: {e}")
+            # Fallback: plain list without AI summary
+            cat_html = "<ol>"
+            for a in items:
+                cat_html += f'<li><a href="{a["link"]}" style="color:#0073bb;font-weight:bold">{a["title"]}</a><br>{a["description"][:150]} <span style="color:#888">(来源: {a["source"]})</span></li>'
+            cat_html += "</ol>"
+
+        emoji = {"AWS 官方": "☁️", "AI/GenAI": "🤖", "云计算/科技": "💻", "金融": "💰", "HCLS": "🏥", "零售": "🛒", "新能源": "⚡"}.get(cat, "📌")
+        all_html += f"<h3>{emoji} {cat}</h3>\n{cat_html}\n"
+
+    return all_html
 
 
 def build_stats_table(stats):
