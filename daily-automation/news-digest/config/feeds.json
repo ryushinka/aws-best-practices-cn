@@ -1,0 +1,20 @@
+{
+  "feeds": [
+    {"name": "AWS What's New", "url": "https://aws.amazon.com/about-aws/whats-new/recent/feed/", "category": "AWS 官方", "enabled": true},
+    {"name": "AWS Blog", "url": "https://aws.amazon.com/blogs/aws/feed/", "category": "AWS 官方", "enabled": true},
+    {"name": "The Verge AI", "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml", "category": "AI/GenAI", "enabled": true},
+    {"name": "TechCrunch AI", "url": "https://techcrunch.com/category/artificial-intelligence/feed/", "category": "AI/GenAI", "enabled": true},
+    {"name": "OpenAI Blog", "url": "https://openai.com/blog/rss.xml", "category": "AI/GenAI", "enabled": true},
+    {"name": "InfoQ Cloud", "url": "https://feed.infoq.com/cloud-computing", "category": "云计算/科技", "enabled": true},
+    {"name": "The New Stack", "url": "https://thenewstack.io/feed", "category": "云计算/科技", "enabled": true},
+    {"name": "Hacker News Top", "url": "https://hnrss.org/newest?points=100", "category": "云计算/科技", "enabled": true},
+    {"name": "Ars Technica", "url": "https://feeds.arstechnica.com/arstechnica/technology-lab", "category": "云计算/科技", "enabled": true},
+    {"name": "WSJ Markets", "url": "https://feeds.content.dowjones.io/public/rss/mw_realtimeheadlines", "category": "金融", "enabled": true},
+    {"name": "Reuters Business", "url": "https://www.reutersagency.com/feed/?taxonomy=best-sectors&post_type=best", "category": "金融", "enabled": true},
+    {"name": "STAT News", "url": "https://www.statnews.com/feed/", "category": "HCLS", "enabled": true},
+    {"name": "FiercePharma", "url": "https://www.fiercepharma.com/rss/xml", "category": "HCLS", "enabled": true},
+    {"name": "Retail Dive", "url": "https://www.retaildive.com/feeds/news/", "category": "零售", "enabled": true},
+    {"name": "CleanTechnica", "url": "https://cleantechnica.com/feed/", "category": "新能源", "enabled": true},
+    {"name": "TechCrunch", "url": "https://techcrunch.com/feed/", "category": "云计算/科技", "enabled": true}
+  ]
+}
