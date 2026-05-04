@@ -13,6 +13,10 @@
 
 - [IAM 分组访问 EC2 控制台操作手册](./iam-security/IAM_EC2_Access_Control_Guide.md) — 基于标签的 EC2 实例分组权限隔离（中国区）
 
+### ⏰ 每日自动化
+
+- [每日自动化任务平台搭建指南](./daily-automation/Daily_Automation_Setup_Guide.md) — Lambda + EventBridge + SES 构建定时任务（账单报告等）
+
 ### 👥 研发协作
 
 - [AI 时代的研发协作指南](./collaboration/AI_Era_RnD_Collaboration_Guide.md) — AI 原生团队协作模式
@@ -23,6 +27,7 @@
 aws-best-practices-cn/
 ├── kiro/                    # Kiro IDE 相关
 ├── iam-security/            # 身份、权限、访问控制
+├── daily-automation/        # 定时自动化任务
 └── collaboration/           # 团队协作
 ```
 
