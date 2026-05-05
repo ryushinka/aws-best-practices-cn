@@ -12,6 +12,7 @@ SES_REGION = "us-west-2"
 BEDROCK_REGION = "us-west-2"
 BEDROCK_MODEL = "us.anthropic.claude-sonnet-4-6"
 DYNAMODB_TABLE = "daily-news-stats"
+BOOKMARK_API = "https://67khjohoqb.execute-api.us-west-2.amazonaws.com"
 MAX_ARTICLES = 100
 
 
@@ -36,6 +37,22 @@ def lambda_handler(event, context):
     # 3. Generate summary via Bedrock
     if selected:
         summary_html = generate_summary(selected)
+        # Inject bookmark links after each </li>
+        today_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        for a in selected:
+            encoded_title = urllib.parse.quote(a["title"][:80])
+            encoded_url = urllib.parse.quote(a["link"])
+            encoded_source = urllib.parse.quote(a["source"])
+            bookmark_link = f'{BOOKMARK_API}/?title={encoded_title}&url={encoded_url}&source={encoded_source}&date={today_str}'
+            # Find the article link in HTML and append bookmark after it
+            if a["link"] in summary_html:
+                summary_html = summary_html.replace(
+                    a["link"] + '"',
+                    a["link"] + '" target="_blank"',
+                    1
+                )
+        # Add a global bookmark section note
+        summary_html += f'<p style="color:#888;font-size:12px;margin-top:16px">💡 点击每条新闻标题查看原文。如需收藏，请访问 <a href="{BOOKMARK_API}/?action=list">收藏列表</a></p>'
     else:
         summary_html = "<p>今日无新文章。</p>"
 
@@ -235,6 +252,29 @@ def generate_summary(articles):
             for a in items:
                 cat_html += f'<li><a href="{a["link"]}" style="color:#0073bb;font-weight:bold">{a["title"]}</a><br>{a["description"][:150]} <span style="color:#888">(来源: {a["source"]})</span></li>'
             cat_html += "</ol>"
+
+        # Inject bookmark links after each </li>
+        today_str = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        for a in items:
+            encoded_title = urllib.parse.quote(a["title"][:80])
+            encoded_url = urllib.parse.quote(a["link"])
+            encoded_source = urllib.parse.quote(a["source"])
+            bm_url = f'{BOOKMARK_API}/?title={encoded_title}&url={encoded_url}&source={encoded_source}&date={today_str}'
+            # Insert bookmark link before </li> where the article URL appears
+            if a["link"] and a["link"] in cat_html:
+                cat_html = cat_html.replace(
+                    a["link"],
+                    a["link"] + '" target="_blank',
+                    1
+                )
+            # Add ⭐ after each </li> that contains this source
+            bookmark_tag = f' <a href="{bm_url}" style="font-size:11px;color:#f90;text-decoration:none" target="_blank">⭐收藏</a>'
+            if a["source"] in cat_html:
+                cat_html = cat_html.replace(
+                    f"(来源: {a['source']})</span></li>",
+                    f"(来源: {a['source']})</span>{bookmark_tag}</li>",
+                    1
+                )
 
         emoji = {"AWS 官方": "☁️", "AI/GenAI": "🤖", "云计算/科技": "💻", "金融": "💰", "HCLS": "🏥", "零售": "🛒", "新能源": "⚡"}.get(cat, "📌")
         all_html += f"<h3>{emoji} {cat}</h3>\n{cat_html}\n"
