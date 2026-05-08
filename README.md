@@ -17,6 +17,10 @@
 
 - [每日自动化任务平台搭建指南](./daily-automation/Daily_Automation_Setup_Guide.md) — Lambda + EventBridge + SES 构建定时任务（账单报告等）
 
+### 🧠 Bedrock 接入
+
+- [Bedrock API 调试工具包](./bedrock-debug/README.md) — 环境诊断 + Converse / 流式 / Tool Use 可直接运行的示例
+
 ### 👥 研发协作
 
 - [AI 时代的研发协作指南](./collaboration/AI_Era_RnD_Collaboration_Guide.md) — AI 原生团队协作模式
@@ -28,6 +32,7 @@ aws-best-practices-cn/
 ├── kiro/                    # Kiro IDE 相关
 ├── iam-security/            # 身份、权限、访问控制
 ├── daily-automation/        # 定时自动化任务
+├── bedrock-debug/           # Bedrock API 调试工具包
 └── collaboration/           # 团队协作
 ```
 
