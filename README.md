@@ -13,6 +13,10 @@
 
 - [IAM 分组访问 EC2 控制台操作手册](./iam-security/IAM_EC2_Access_Control_Guide.md) — 基于标签的 EC2 实例分组权限隔离（中国区）
 
+### 🌐 CloudFront / 静态站点
+
+- [CloudFront 中国区 + S3 静态网站 + 自定义域名 + SSL 证书 SOP](./cloudfront-static-site/CloudFront_China_S3_Static_Site_SOP.md) — 端到端配置流程、中国区差异、常见错误对照表（含真实排障时间线）
+
 ### ⏰ 每日自动化
 
 - [每日自动化任务平台搭建指南](./daily-automation/Daily_Automation_Setup_Guide.md) — Lambda + EventBridge + SES 构建定时任务（账单报告等）
@@ -31,6 +35,7 @@
 aws-best-practices-cn/
 ├── kiro/                    # Kiro IDE 相关
 ├── iam-security/            # 身份、权限、访问控制
+├── cloudfront-static-site/  # CloudFront + S3 静态站点（中国区）
 ├── daily-automation/        # 定时自动化任务
 ├── bedrock-debug/           # Bedrock API 调试工具包
 └── collaboration/           # 团队协作
